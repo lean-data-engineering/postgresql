@@ -1,0 +1,16 @@
+services:
+  postgres-primary:
+    image: postgres:17
+    container_name: postgres-primary
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: appdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - primary-data:/var/lib/postgresql/data
+
+volumes:
+    primary-data:
+      driver: local

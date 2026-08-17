@@ -1,0 +1,38 @@
+services:
+  postgres-primary:
+    image: postgres:17
+    container_name: postgres-primary
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: appdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - primary-data:/var/lib/postgresql/data
+    
+  postgres-replica:
+    image: postgres:17
+    container_name: postgres-replica
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+      - replica-data:/var/lib/postgresql/data
+
+  api:
+    build: .
+    container_name: express-api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres-primary
+      - postgres-replica
+
+volumes:
+    primary-data:
+      driver: local
+      name: postgres-primary-data
+
+    replica-data:
+      driver: local
+      name: postgres-replica-data

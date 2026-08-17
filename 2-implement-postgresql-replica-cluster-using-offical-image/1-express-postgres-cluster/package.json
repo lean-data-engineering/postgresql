@@ -1,0 +1,17 @@
+{
+  "name": "2_implement_postgresql_replica_cluster_using_offical_image",
+  "version": "1.0.0",
+  "description": "Let's do it the **real PostgreSQL way**, not the Bitnami way.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "express": "^5.2.1",
+    "pg": "^8.22.0"
+  }
+}

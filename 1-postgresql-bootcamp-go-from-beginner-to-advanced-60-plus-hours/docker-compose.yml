@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: postgres:15.1-alpine
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: pgdata
+        target: /var/lib/postgres/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    networks:
+      - backend
+    ports:
+      - 5432:5432
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    restart: unless-stopped
+    user: root
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    volumes:
+      - type: volume
+        source: pgadmin-data
+        target: /var/lib/pgadmin
+      - type: bind
+        source: ./1_sample_data
+        target: /var/lib/pgadmin/storage/admin_example.com
+    networks:
+      - backend
+    ports:
+      - 5050:80
+    depends_on:
+      - postgres
+
+
+volumes:
+  pgdata:
+    external: true
+  pgadmin-data:
+    external: true
+
+    
+networks:
+  backend:

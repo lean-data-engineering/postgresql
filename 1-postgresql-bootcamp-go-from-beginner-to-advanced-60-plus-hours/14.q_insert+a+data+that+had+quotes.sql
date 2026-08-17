@@ -1,0 +1,170 @@
+-------------------------------------------------
+-------------------------------------------------
+-- INSERT INTO customers (first_name) 
+-- VALUES 
+-- ('Bill'O Sullivan');
+-------------------------------------------------
+-- why its giving error?
+-------------------------------------------------
+-- The error occurs because of the apostrophe ' inside the string.
+-- SQL interprets ' as the start/end of a string literal.
+-- So PostgreSQL reads it like this:
+-- 'Bill'   ← string ends here
+-- O Sullivan'  ← invalid syntax
+-- That is why it throws a syntax error.
+-- ✅ Correct Way: Escape the Apostrophe
+-- In SQL, you escape a single quote by doubling it.
+-- INSERT INTO customers (first_name)
+-- VALUES ('Bill''O Sullivan');
+-- Here:
+-- ''  → represents one literal '
+-- Result stored:
+-- Bill'O Sullivan
+-- 🧠 Example
+-- INSERT INTO customers(first_name)
+-- VALUES ('D''Angelo');
+-- Stored value:
+-- D'Angelo
+
+INSERT INTO customers (first_name)
+VALUES 
+('Bill''O Sullivan');
+
+SELECT * FROM customers;
+
+-------------------------------------------------
+-------------------------------------------------
+-- special attention in literals and identifiers
+-------------------------------------------------
+-- In SQL (including PostgreSQL), several things require special attention in literals and identifiers, similar to the ' issue.
+-- 1️⃣ Single Quotes ' (String Literals)
+-- As you saw:
+-- 'Bill'O Sullivan'
+-- ❌ invalid
+-- Correct:
+-- 'Bill''O Sullivan'
+-- Rule:
+-- ' → escape with ''
+-- Example:
+-- INSERT INTO customers(first_name)
+-- VALUES ('O''Reilly');
+------------------------------------------------------
+-- 2️⃣ Double Quotes " (Identifiers)
+-- Double quotes are used for identifiers (table names, column names).
+-- Example:
+-- SELECT "firstName" FROM customers;
+-- Why?
+-- Because PostgreSQL automatically lowercases identifiers.
+-- Example:
+-- CREATE TABLE TestTable(id INT);
+-- Internally becomes:
+-- testtable
+-- But this:
+-- CREATE TABLE "TestTable"(id INT);
+-- preserves case.
+-- ⚠️ Then you must always use quotes:
+-- SELECT * FROM "TestTable";
+---------------------------------------------------------
+-- 3️⃣ Backslash Escapes
+-- PostgreSQL normally does not treat \ as escape unless using E-strings.
+-- Example:
+-- E'Hello\nWorld'
+-- Result:
+-- Hello
+-- World
+-- Without E:
+-- 'Hello\nWorld'
+-- \n is just text.
+-----------------------------------------------------------
+-- 4️⃣ Dollar Quoting ($$) (Very Useful)
+-- Instead of escaping quotes, PostgreSQL allows dollar quoting.
+-- Example:
+-- INSERT INTO customers(first_name)
+-- VALUES ($$Bill'O Sullivan$$);
+-- No escaping needed.
+-- Very common in functions.
+-- Example:
+-- CREATE FUNCTION test()
+-- RETURNS TEXT
+-- AS $$
+-- BEGIN
+--     RETURN 'Hello';
+-- END;
+-- $$ LANGUAGE plpgsql;
+---------------------------------------------------------
+-- 5️⃣ NULL vs 'NULL'
+-- Very common mistake.
+-- NULL
+-- means missing value.
+-- 'NULL'
+-- is a string.
+-- Example:
+-- INSERT INTO users(name) VALUES (NULL);
+-- vs
+-- INSERT INTO users(name) VALUES ('NULL');
+-- Different values.
+------------------------------------------------------------
+-- 6️⃣ Boolean Values
+-- PostgreSQL allows:
+-- TRUE
+-- FALSE
+-- But also:
+-- 'true'
+-- 'false'
+-- Example:
+-- INSERT INTO users(active) VALUES (TRUE);
+---------------------------------------------------------------
+-- 7️⃣ Date and Time Literals
+-- Dates must be quoted.
+-- Correct:
+-- '2026-03-11'
+-- Example:
+-- INSERT INTO orders(order_date)
+-- VALUES ('2026-03-11');
+-- Often combined with casting:
+-- DATE '2026-03-11'
+----------------------------------------------------------------
+-- 8️⃣ Reserved Keywords
+-- Some words cannot be used as identifiers unless quoted.
+-- Example:
+-- user
+-- order
+-- group
+-- select
+-- Bad:
+-- CREATE TABLE order(id INT);
+-- Correct:
+-- CREATE TABLE "order"(id INT);
+-- But best practice:
+-- avoid reserved keywords
+------------------------------------------------------
+-- 9️⃣ Array Literals
+-- Arrays require special syntax.
+-- Example:
+-- ARRAY[1,2,3]
+-- or
+-- '{1,2,3}'
+-------------------------------------------------------
+-- 🔟 JSON Strings
+-- Quotes must be escaped.
+-- Example:
+-- '{"name":"John"}'
+-- Or easier:
+-- $$ {"name":"John"} $$
+---------------------------------------------------
+-- 🧠 Most Important Things to Remember
+-- These cause 90% of SQL syntax mistakes.
+-- Problem	                            Fix
+-- ' inside string	                    ''
+-- Case-sensitive identifiers	        "name"
+-- Backslash escapes	                E''
+-- NULL vs 'NULL'	                    different meanings
+-- Reserved keywords	                avoid or quote
+-- Quotes in long strings	            use $$
+-- ⭐ Pro Tip
+-- In real production code, most of these problems disappear if you always use parameterized queries instead of manual string building.
+-- Example (Python)
+-- cursor.execute(
+--     "INSERT INTO customers(first_name) VALUES (%s)",
+--     ("Bill'O Sullivan",)
+-- )
