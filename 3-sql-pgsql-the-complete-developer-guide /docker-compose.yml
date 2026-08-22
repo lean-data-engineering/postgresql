@@ -21,10 +21,11 @@ services:
   #     - 8080:8080
   #   networks:
   #     - backend
-    
+
   pgadmin:
     image: dpage/pgadmin4:latest
     restart: unless-stopped
+    user: root
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@example.com
       PGADMIN_DEFAULT_PASSWORD: admin123
@@ -33,7 +34,7 @@ services:
         source: pgadmin-data
         target: /var/lib/pgadmin
       - type: bind
-        source: ./
+        source: ./.pgadmin-storage
         target: /var/lib/pgadmin/storage/admin_example.com
     networks:
       - backend
@@ -42,13 +43,11 @@ services:
     depends_on:
       - postgres
 
-
 volumes:
   pgdata:
     external: true
   pgadmin-data:
     external: true
 
-    
 networks:
   backend:
