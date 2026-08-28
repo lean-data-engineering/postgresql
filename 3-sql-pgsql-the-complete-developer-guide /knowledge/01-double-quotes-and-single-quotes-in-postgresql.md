@@ -38,7 +38,7 @@ Most of the time, you do not need to use them at all. You only pull out double q
 
 ### Scenario A: Your table or column name uses Capital Letters
 
-As mentioned earlier, PostgreSQL forces everything to lowercase by default. If you created a table or column using camelCase or capital letters and want to preserve that capitalization, you must wrap it in double quotes every time you reference it.
+PostgreSQL forces everything to lowercase by default. If you created a table or column using camelCase or capital letters and want to preserve that capitalization, you must wrap it in double quotes every time you reference it.
 
 ```sql
 -- Correct: Forces PostgreSQL to look for the exact casing
