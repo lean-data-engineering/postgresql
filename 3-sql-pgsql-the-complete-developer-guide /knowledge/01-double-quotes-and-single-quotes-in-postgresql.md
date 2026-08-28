@@ -52,6 +52,15 @@ SELECT FirstName FROM employees;
 
 If a column name contains a space, a hyphen, or matches a reserved SQL keyword (like `group` or `order`), you must use double quotes so the database knows it is a single column name.
 
+PostgreSQL does not allow hyphens (-) or spaces in standard unquoted identifiers for table, database, or column names because it treats the hyphen as a minus sign and space as command/keyword seperators.
+
+#### How to Use Hyphens and spaces (If Needed)
+
+- **Double Quotes:** You can use hyphens & spaces by wrapping the name in double quotes, like `"my-table"` or `"my table"`.
+- **The Catch:** You must use double quotes every time you query that table or column (e.g., `SELECT * FROM "my-table";` or `SELECT * FROM "my table";`).
+- **Best Practice:** Avoid hyphens and spaces completely. Use underscores (my_table) instead.
+
+
 ```sql
 -- Correct: Handles spaces and reserved keywords safely
 SELECT "first name", "order" FROM sales_data;
