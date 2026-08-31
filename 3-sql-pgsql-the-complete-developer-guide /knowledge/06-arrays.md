@@ -2,7 +2,7 @@
 
 In PostgreSQL, an **_array data type_ allows you to store a collection of multi-valued elements within a single table column**. PostgreSQL permits arrays of any built-in, user-defined, enum, or composite data type, provided that all elements within a specific array share the exact same type.
 
-Here is a comprehensive guide to defining, querying, and manipulating arrays in PostgreSQL according to the [PostgreSQL Array Documentation](https://www.postgresql.org/docs/current/arrays.html). [1]
+Here is a comprehensive guide to defining, querying, and manipulating arrays in PostgreSQL according to the [PostgreSQL Array Documentation](https://www.postgresql.org/docs/current/arrays.html).
 
 ---
 
