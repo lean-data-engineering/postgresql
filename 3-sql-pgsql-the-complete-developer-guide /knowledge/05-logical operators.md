@@ -4,17 +4,17 @@
 
 ## Core Logical Operators
 
-The three foundational logical operators are used to connect basic conditional expressions. [1, 4]
+The three foundational logical operators are used to connect basic conditional expressions.
 
 - **`AND`:** Returns `TRUE` only if **all conditions** separated by the operator are true.
   - _Analogy:_ Going to a movie only if you have money **`AND`** the theater is open.
   - _Example:_ `SELECT * FROM employees WHERE department = 'sales' AND salary > 50000;`
 - **`OR`:** Returns `TRUE` if at least one of the conditions is true.
   - _Analogy:_ Eating out if you crave pizza `OR` you crave burgers.
-  - _Example:_ `SELECT * FROM Customers WHERE Country = 'USA' OR Country = 'Canada';`
+  - _Example:_ `SELECT * FROM customers WHERE country = 'USA' OR country = 'Canada';`
 - **`NOT`:** Reverses the outcome of a boolean expression, turning `TRUE` into `FALSE` and vice-versa.
   - _Analogy:_ Entering a room only if it is `NOT` locked.
-  - _Example:_ `SELECT * FROM Products WHERE NOT Discontinued = 1;`
+  - _Example:_ `SELECT * FROM Products WHERE NOT discontinued = 1;`
 
 ---
 
@@ -23,13 +23,13 @@ The three foundational logical operators are used to connect basic conditional e
 These operators check individual values against ranges, patterns, sets, or structural traits.
 
 - **`BETWEEN`:** Filters values that fall within an **inclusive range**.
-  - _Example:_ `WHERE Age BETWEEN 20 AND 30;` (Includes 20 and 30).
+  - _Example:_ `WHERE age BETWEEN 20 AND 30;` (Includes 20 and 30).
 - **`IN`:** Matches a column value against **any literal value** in a specified comma-separated list.
-  - _Example:_ `WHERE Role IN ('Manager', 'Director', 'VP');`
+  - _Example:_ `WHERE role IN ('Manager', 'Director', 'VP');`
 - **`LIKE`:** Performs **pattern matching** using wildcard characters like `%` (zero or more characters) or `_` (exactly one character).
-  - _Example:_ `WHERE Name LIKE 'J%';` (Finds names starting with 'J').
-- **`IS NULL`/ `IS NOT NULL`:** Specifically identifies records where a field contains no data (NULL) or not NULL.
-  - _Example:_ `WHERE Email IS NULL;`
+  - _Example:_ `WHERE name LIKE 'J%';` (Finds names starting with 'J').
+- **`IS NULL`/ `IS NOT NULL`:** Specifically identifies records where a field contains no data (`NULL`) or `not NULL`.
+  - _Example:_ `WHERE email IS NULL;`
 
 ---
 
@@ -38,11 +38,11 @@ These operators check individual values against ranges, patterns, sets, or struc
 These operators compare a specific column value against a list or dataset generated dynamically by an internal subquery.
 
 - **`EXISTS`:** Returns `TRUE` if the subquery returns **one or more rows**, regardless of the data inside them.
-  - _Example:_ `WHERE EXISTS (SELECT 1 FROM Orders WHERE Orders.CustomerID = Customers.ID);`
+  - _Example:_ `WHERE EXISTS (SELECT 1 FROM orders WHERE orders.customerID = customers.id);`
 - **`ANY` / `SOME`:** Returns `TRUE` if the condition matches **at least one value** produced by the subquery.
-  - _Example:_ `WHERE Price > ANY (SELECT Price FROM CompetitorProducts);`
+  - _Example:_ `WHERE price > ANY (SELECT price FROM competitor_products);`
 - **`ALL`:** Returns `TRUE` only if the condition evaluates to true for **every single value** in the subquery result.
-- _Example:_ `WHERE Score > ALL (SELECT Score FROM ClassB);`
+- _Example:_ `WHERE score > ALL (SELECT Score FROM class_b);`
 
 ---
 
@@ -65,15 +65,15 @@ When you write complex filters combining multiple conditions, SQL evaluates them
 The `IN` operator checks if a value matches **any value in a literal list** or the results of a subquery. It is a cleaner, shorter way to write multiple `OR` conditions.
 
 - **Syntax:** `column IN (value1, value2, ...)` or `column IN (SELECT column FROM ...)`
-- **Behavior:** Returns TRUE if the value exists in the list.
+- **Behavior:** Returns `TRUE` if the value exists in the list.
 - **Example:** Find customers living in specific cities.
 
   ```sql
-  SELECT * FROM Customers
+  SELECT * FROM customers
   WHERE City IN ('London', 'Paris', 'Tokyo');
   ```
 
-  _(This replaces City = 'London' OR City = 'Paris' OR City = 'Tokyo')_
+  _(This replaces city = 'London' OR city = 'Paris' OR city = 'Tokyo')_
 
 ---
 
@@ -86,10 +86,10 @@ The `EXISTS` operator tests for the **presence of rows** in a subquery. It does 
 - **Example:** Find customers who have placed at least one order.
 
   ```sql
-  SELECT CustomerName FROM Customers c 
+  SELECT customer_name FROM customers c
   WHERE EXISTS (
       SELECT 1 FROM Orders o
-      WHERE o.CustomerID = c.CustomerID
+      WHERE o.customer_id = c.customer_id
   );
   ```
 
@@ -103,9 +103,9 @@ The `LIKE` operator is used for **pattern matching** in text columns. It uses tw
 - `_` represents exactly one single character.
 - **Syntax:** `column LIKE 'pattern'`
 - **Examples:**
-  - `WHERE Name LIKE 'A%'` → Starts with "A" (e.g., Alice, Albert).
-  - `WHERE Name LIKE '%son'` → Ends with "son" (e.g., Johnson, Simpson).
-  - `WHERE Name LIKE '_a%'` → Has "a" as the second letter (e.g., Mary, Gary).
+  - `WHERE name LIKE 'A%'` → Starts with "A" (e.g., Alice, Albert).
+  - `WHERE name LIKE '%son'` → Ends with "son" (e.g., Johnson, Simpson).
+  - `WHERE name LIKE '_a%'` → Has "a" as the second letter (e.g., Mary, Gary).
 
 ---
 
@@ -118,13 +118,13 @@ The `LIKE` operator is used for **pattern matching** in text columns. It uses tw
 - **Example:** Find products that are more expensive than at least one product in Category 2.
 
   ```sql
-  SELECT ProductName, Price FROM Products
-  WHERE Price > ANY (
-      SELECT Price FROM Products WHERE CategoryID = 2
+  SELECT product_name, price FROM products
+  WHERE price > ANY (
+      SELECT price FROM products WHERE category_id = 2
   );
   ```
 
-  _(If Category 2 has prices, > ANY means greater than the minimum value, so > 10)_
+  _(If category 2 has prices, > ANY means greater than the minimum value, so > 10)_
 
 ---
 
@@ -137,13 +137,13 @@ The `ALL` operator compares a single scalar value against **every single value**
 - **Example:** Find products that are more expensive than every product in Category 2.
 
   ```sql
-  SELECT ProductName, Price FROM Products
-  WHERE Price > ALL (
-      SELECT Price FROM Products WHERE CategoryID = 2
+  SELECT product_name, price FROM products
+  WHERE price > ALL (
+      SELECT price FROM products WHERE category_id = 2
   );
   ```
 
-  _(If Category 2 has prices, > ALL means greater than the maximum value, so > 50)_
+  _(If category 2 has prices, > ALL means greater than the maximum value, so > 50)_
 
 ---
 
