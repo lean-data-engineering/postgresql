@@ -51,6 +51,6 @@ If the optimizer fails to flatten the query, the engine is forced to waste time 
 
 A join bypasses this fragmented workflow. Because it operates on a singular relational matrix, the database optimizer can map out an optimal execution plan from start to finish, choosing the fastest method to lace the datasets together via index paths.
 
-> > _(Note: In distributed databases, subqueries are sometimes preferred because filtering data locally within a subquery prevents heavy, slow table transfers across network nodes.)_
+> _(Note: In distributed databases, subqueries are sometimes preferred because filtering data locally within a subquery prevents heavy, slow table transfers across network nodes.)_
 
 ---
