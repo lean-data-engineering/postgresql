@@ -4,7 +4,7 @@
 
 PostgreSQL strictly prohibits this. If you try, the database engine will immediately throw the error: `ERROR: CREATE DATABASE cannot run inside a transaction block`.
 
-> > _postgresql doesn't support `CREATE DATABASE IF NOT EXISTS` command_
+> _postgresql doesn't support `CREATE DATABASE IF NOT EXISTS` command_
 
 ## Why PostgreSQL Restricts This
 
