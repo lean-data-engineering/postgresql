@@ -6,7 +6,7 @@ Swapping them will immediately cause a syntax error. Here is the exact breakdown
 
 ---
 
-## 1. Single Quotes (`'Text'`) = Text Data Values
+## 1. Single Quotes (`'Text'`) = _Text Data Values_
 
 Use single quotes exclusively when you are typing out **literal string values, dates, or timestamps** that you want to insert, update, or filter.
 
@@ -30,7 +30,7 @@ Use single quotes exclusively when you are typing out **literal string values, d
 
 ---
 
-## 2. Double Quotes (`"Identifier"`) = Database Objects (Tables & Columns)
+## 2. Double Quotes (`"Identifier"`) = _Database Objects (Tables & Columns)_
 
 Use double quotes exclusively for **identifiers**—the names of your tables, columns, schemas, or views.
 
