@@ -16,6 +16,16 @@ The three foundational logical operators are used to connect basic conditional e
   - _Analogy:_ Entering a room only if it is `NOT` locked.
   - _Example:_ `SELECT * FROM Products WHERE NOT discontinued = 1;`
 
+### Operator Precedence (Order of Operations)
+
+When you write complex filters combining multiple conditions, SQL evaluates them using a strict structural hierarchy:
+
+1. **NOT** (Evaluated first)
+2. **AND** (Evaluated second)
+3. **OR** (Evaluated last)
+
+_**Pro Tip:** Always use parentheses `()` to override default precedence rules and make your queries easier to read. For example, `WHERE (A OR B) AND C` runs completely differently than `WHERE A OR B AND C`_
+
 ---
 
 ## Comparison & Range Filtering Operators
@@ -43,18 +53,6 @@ These operators compare a specific column value against a list or dataset genera
   - _Example:_ `WHERE price > ANY (SELECT price FROM competitor_products);`
 - **`ALL`:** Returns `TRUE` only if the condition evaluates to true for **every single value** in the subquery result.
 - _Example:_ `WHERE score > ALL (SELECT Score FROM class_b);`
-
----
-
-## Operator Precedence (Order of Operations)
-
-When you write complex filters combining multiple conditions, SQL evaluates them using a strict structural hierarchy:
-
-1. **NOT** (Evaluated first)
-2. **AND** (Evaluated second)
-3. **OR** (Evaluated last)
-
-**Pro Tip:** Always use parentheses `()` to override default precedence rules and make your queries easier to read. For example, `WHERE (A OR B) AND C` runs completely differently than `WHERE A OR B AND C`
 
 ---
 
