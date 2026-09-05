@@ -6,7 +6,7 @@
 | --------------------------- | -------------------------------------------------------- | --------------------- |
 | **`REGEXP_REPLACE`**        | Find and replace text matching a pattern.                | `TEXT`                |
 | **`REGEXP_MATCH`**          | Extracts the **first** match or its capture groups.      | `TEXT[]` (Array)      |
-| **REGEXP_MATCHES**          | Extracts **all** matches (using `'g'` flag) as rows.     | `SETOF TEXT[]` (Rows) |
+| **`REGEXP_MATCHES`**        | Extracts **all** matches (using `'g'` flag) as rows.     | `SETOF TEXT[]` (Rows) |
 | **`REGEXP_SUBSTR`**         | Extracts a substring or specific group as plain text.    | `TEXT`                |
 | **`REGEXP_SPLIT_TO_ARRAY`** | Splits a string by a regex delimiter into an array.      | `TEXT[]` (Array)      |
 | **`REGEXP_SPLIT_TO_TABLE`** | Splits a string by a regex delimiter into separate rows. | `SETOF TEXT` (Rows)   |
