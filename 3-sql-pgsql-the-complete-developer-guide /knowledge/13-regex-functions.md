@@ -41,12 +41,53 @@ Here is your comprehensive, copy-pasteable PostgreSQL regex reference sheet, com
 ### 🔹 `REGEXP_REPLACE` (Modify or Delete Text)
 
 - **Purpose:** Replaces matched text with a new string.
+- **Syntax in PostgreSQL:**
+
+  ```sql
+  REGEXP_REPLACE(source, pattern, replacement [, flags])
+  ```
+
+  - **`source`:** The string or column you want to change
+  - **`pattern`:** The POSIX regular expression
+  - **`replacement`:** The text to swap in (supports `\1`, `\2` for matching groups)
+  - **`flags`**_(Optional)_: Modifies controlling how the engine matches text.
+  - **Common Flags:**
+    - **`g`** (Global): Replaces **all** occurances, not just the first one.
+    - **`i`** (Case-insensitive): ignores upper/lowercase difference
+    - **`i` and `g` can be combined** as `gi` or `ig`
+
 - **Snippet:** Reformatting a phone number using numbered capture groups (`\1`, `\2`, `\3`).
 
   ```sql
+  ----------------------------------------------------------
+  -- 1. Replace the First Match vs. All Matches (The 'g' Flag)
+  ----------------------------------------------------------
+  -- Without 'g': Replaces only the first digit sequence
+  SELECT REGEXP_REPLACE('Apples: 10, Bananas: 20', '[0-9]+', 'X');
+  -- Output: 'Apples: X, Bananas: 20'
+
+  -- With 'g': Replaces all digit sequences
+  SELECT REGEXP_REPLACE('Apples: 10, Bananas: 20', '[0-9]+', 'X', 'g');
+  -- Output: 'Apples: X, Bananas: X'
+  ----------------------------------------------------------
+  -- 2. Case-Insensitive Matching ('i' Flag)
+  ----------------------------------------------------------
+  SELECT REGEXP_REPLACE('Bad news, bad day, BAD luck', 'bad', 'good', 'gi');
+  -- Output: 'good news, good day, good luck'
+  ----------------------------------------------------------
+  -- 3. Using Backreferences (\1, \2)
+  ----------------------------------------------------------
+  -- Swap the order of two words separated by a space
+  SELECT REGEXP_REPLACE('John Doe', '([A-Za-z]+) ([A-Za-z]+)', '\2, \1');
+  -- Output: 'Doe, John'
+
   SELECT REGEXP_REPLACE('123-456-7890', '^(\d{3})-(\d{3})-(\d{4})$', '(\1) \2-\3');
   -- Output: (123) 456-7890
-
+  ----------------------------------------------------------
+  -- 4. Stripping Everything Except Text & Spaces
+  SELECT REGEXP_REPLACE('Hello, World! 123 #Postgres', '[^a-zA-Z ]', '', 'g');
+  -- Output: 'Hello World  Postgres'
+  ----------------------------------------------------------
   -- Cleaning strings to convert them to numbers will fail if your regex accidentally leaves trailing letters behind.
   -- ERROR: '1250.50USD' cannot be cast to numeric
   SELECT REGEXP_REPLACE('$1,250.50USD', '[$,]', '', 'g')::NUMERIC;
@@ -85,14 +126,32 @@ Here is your comprehensive, copy-pasteable PostgreSQL regex reference sheet, com
 ### 🔹 `REGEXP_MATCHES` (Extract Multiple Rows)
 
 - **Purpose:** Finds _all_ matches in a string and returns them as a set of rows. it behaves exactly like `REGEXP_MATCH` if `g` flag is not used.
+- **Syntax in PostgreSQL:**
+
+  ```sql
+  REGEXP_MATCHES(source, pattern [, flags])
+  ```
+
 - **Snippet:** Extracting all hashtags from a block of text.
 
   ```sql
+  --------------------------------------------------------------
+  -- 1. Example (Extract digits):
+  --------------------------------------------------------------
+  SELECT REGEXP_MATCHES('User ID: #95427', '[0-9]+');
+  -- Output: {95427}  (Returns an array)
+  --------------------------------------------------------------
+  -- 2. Example (Using Capture Groups): If you use parentheses (), it splits the matches into different array elements.
+
+  SELECT REGEXP_MATCHES('John Doe', '([A-Za-z]+) ([A-Za-z]+)');
+  -- Output: {John,Doe}
+  --------------------------------------------------------------
   SELECT REGEXP_MATCHES('Learning #sql and #postgres in #2026', '#\w+', 'g');
   -- Output:
   --  {#sql}
   --  {#postgres}
   --  {#2026}
+  --------------------------------------------------------------
   ```
 
 - **Edge Case (The Vanishing Row Trap):** If `REGEXP_MATCHES` does not find a match, it returns **0 rows**. If you use it inside a standard `SELECT` clause next to other columns, it will completely hide the entire row from your query results.
