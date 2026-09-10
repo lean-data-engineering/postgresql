@@ -1,4 +1,4 @@
-# Implementing Nested Comments with SelfReferencing
+# Implementing Nested Comments with Self Referencing
 
 ## 1: ER diagram for bog subsystem
 
