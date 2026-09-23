@@ -31,7 +31,7 @@ In a correlated subquery, the inner query references one or more columns from th
 
 ## Execution Difference: Subqueries vs. Joins
 
-While modern database optimizers try to rewrite simple subqueries into joins internally, the core mechanical execution paths remain distinct: [3, 6]
+While modern database optimizers try to rewrite simple subqueries into joins internally, the core mechanical execution paths remain distinct:
 
 | **Execution Phase**       | **Subquery Execution**                                                                                                                      | **Join Execution**                                                                                           |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
